@@ -24,18 +24,21 @@ public class TransactionController {
     @Autowired
     VideosRepository videosRepository;
 
-//    @CrossOrigin(origins = "https://testyaa.herokuapp.com/")
 //    @GetMapping
 //    public Iterable <Transaction> findAll(){
 //        return transactionRepository.findAll();
 //    }
-//    @CrossOrigin(origins = "https://testyaa.herokuapp.com/")
+
+    @GetMapping
+    public Iterable<Transaction> getAll() {
+        return transactionRepository.findAll();
+    }
+
 //    @GetMapping
 //    public Iterable <Transaction> findStatus(){
 //        return transactionRepository.findByStatus(true);
 //    }
 
-    //    @CrossOrigin(origins = "https://testyaa.herokuapp.com/")
     @PutMapping("/update/{trx_id}")
     public Transaction updateStatus(@PathVariable(value = "trx_id") Long trx_id,
                                     @Valid @RequestBody Transaction transaction){
@@ -51,7 +54,6 @@ public class TransactionController {
 
 
 
-    //    @CrossOrigin(origins = "https://testyaa.herokuapp.com/")
     @PostMapping("/{id}/setTransaction")
     public Transaction createTransaction(@PathVariable (value = "id") Long id,
                                          @RequestParam(value="Videos") Long video,
@@ -82,7 +84,6 @@ public class TransactionController {
         }).orElseThrow(() -> new ResourceNotFoundException("id " + id + " not found"));
     }
 
-    //    @CrossOrigin(origins = "https://testyaa.herokuapp.com/")
     @DeleteMapping("/delete/{trx_id}")
     public void delete(@PathVariable long trx_id) {
         transactionRepository.deleteById(trx_id);
