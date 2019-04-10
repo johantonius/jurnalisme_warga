@@ -6,5 +6,6 @@ public enum Category {
     Food,
     Travel,
     Olahraga,
-    Ekonomi
+    Economy,
+    Inspiring
 }

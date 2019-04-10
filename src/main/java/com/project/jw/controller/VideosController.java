@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Map;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -49,21 +50,50 @@ public class VideosController
     }
 
 
-    @PutMapping("/upload/{video_id}")
+//    @PutMapping("/upload/{video_id}")
+//    public Videos updateVideo(@PathVariable(value = "video_id") Long video_id,
+//                              @Valid @RequestBody Videos videoss) {
+//
+//        Videos vid = videosRepository.findById(video_id)
+//                .orElseThrow(() -> new ResourceNotFoundException("Videos"+ "video_id"+ video_id));
+//
+//        vid.setTitle(videoss.getTitle());
+//        vid.setDescription(videoss.getDescription());
+//        vid.setRegion(videoss.getRegion());
+//        vid.setCategory(videoss.getCategory());
+//
+//        Videos updatedVideo = videosRepository.save(vid);
+//        return updatedVideo;
+//    }
+
+
+
+    @PutMapping("/upload/{id}/{video_id}")
     public Videos updateVideo(@PathVariable(value = "video_id") Long video_id,
+                              @PathVariable(value = "id") Long id,
                               @Valid @RequestBody Videos videoss) {
 
-        Videos vid = videosRepository.findById(video_id)
+//        return null;
+        return userRepository.findById(id).map(savevid->{
+
+            Videos vid = videosRepository.findById(video_id)
                 .orElseThrow(() -> new ResourceNotFoundException("Videos"+ "video_id"+ video_id));
 
         vid.setTitle(videoss.getTitle());
         vid.setDescription(videoss.getDescription());
         vid.setRegion(videoss.getRegion());
         vid.setCategory(videoss.getCategory());
+        vid.setUser(savevid);
 
         Videos updatedVideo = videosRepository.save(vid);
+
         return updatedVideo;
+
+
+        }).orElseThrow(()-> new ResourceNotFoundException("id"+id +"not found"));
+
     }
+
 
     @PutMapping("/admin/upload/{video_id}")
     public Videos updateAdminVideo(@PathVariable(value = "video_id") Long video_id,
@@ -130,62 +160,6 @@ public class VideosController
 
         }
     }
-
-
-//    @PostMapping(value = "{id}/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public Videos upload(@RequestParam(value="upload", required=true) MultipartFile file,
-//                         @PathVariable(value="id" )Long id,
-//                         @Valid @RequestBody Videos videos){
-//        return userRepository.findById(id).map(a->{
-//            videos.setUser(a);
-//            try {
-//                File f= Files.createTempFile("temp", file.getOriginalFilename()).toFile();
-//                file.transferTo(f);
-//                Transformation transformation =
-//                        new Transformation()
-//                                .chain().overlay("jw_logo").opacity(30).flags("relative").width(0.5);
-//                Map options = ObjectUtils.asMap(
-//                        "resource_type", "video", "transformation", transformation
-//                );
-//                Map uploadResult = cloudc.upload(f, options);
-//                JSONObject json=new JSONObject(uploadResult);
-//                String url=json.getString("url");
-////                Videos vids = new Videos();
-//                videos.setUrl(url);
-//
-//
-//
-//                Map uploadResults = cloudc.upload(f, ObjectUtils.asMap("resource_type", "video"));
-//                JSONObject jsons=new JSONObject(uploadResults);
-//                String downloadUrl=jsons.getString("url");
-//                String newDownloadUrl = new String();
-//                String attach = "fl_attachment/";
-//
-//                for (int i = 0; i < downloadUrl.length(); i++) {
-//
-//                    newDownloadUrl += downloadUrl.charAt(i);
-//
-//                    if (i == 47) {
-//
-//                        newDownloadUrl += attach;
-//                    }
-//                }
-//                videos.setStatus(false);
-//
-//                videos.setDownloadUrl(newDownloadUrl);
-//                return videosRepository.save(videos);
-////                return new ResponseEntity<Videos>(videos, HttpStatus.OK);
-//            }catch (IOException e){
-////                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//                return videosRepository.save(videos);
-//
-//            }
-//
-//        }).orElseThrow(() -> new ResourceNotFoundException("id " + id + " not found"));
-//
-//    }
-
-    //    @CrossOrigin(origins = "https://testyaa.herokuapp.com/")
 
 
 

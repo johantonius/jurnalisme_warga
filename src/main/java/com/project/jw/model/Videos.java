@@ -132,6 +132,19 @@ public class Videos{
 //        this.user = user;
 //    }
 
+    @ManyToOne
+    @JoinColumn(name = "id")
+    @JsonIgnore
+    private  User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
 
 
     @OneToMany
