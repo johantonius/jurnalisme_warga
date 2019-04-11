@@ -74,6 +74,7 @@ public class UserController {
         if(username == null) throw new ResourceNotFoundException("email: " + login.getUsername() + " not registered");
         if(bCryptPasswordEncoder.matches(login.getPassword(), username.getPassword()))
         {
+            username.setStatus(true);
             return new ResponseEntity<User>(username, HttpStatus.OK);
         }
         else {
