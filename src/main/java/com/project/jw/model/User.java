@@ -1,8 +1,11 @@
 package com.project.jw.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
 @Entity
 public class User {
@@ -37,6 +40,18 @@ public class User {
     private Role role;
 
     private Boolean status;
+
+    @Temporal(javax.persistence.TemporalType.DATE)
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
+    private Date birthday;
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
 
     //setter getter
     public Long getId() {
