@@ -73,7 +73,6 @@ public class VideosController
                               @PathVariable(value = "id") Long id,
                               @Valid @RequestBody Videos videoss) {
 
-//        return null;
         return userRepository.findById(id).map(savevid->{
 
             Videos vid = videosRepository.findById(video_id)
@@ -161,7 +160,49 @@ public class VideosController
         }
     }
 
+    @PostMapping("/uploadLain")
+    public ResponseEntity<?> uploadLain(@RequestParam(value="upload", required=true) MultipartFile file){
 
+        try {
+            File f= Files.createTempFile("temp", file.getOriginalFilename()).toFile();
+            file.transferTo(f);
+            Transformation transformation =
+                    new Transformation()
+                            .chain().overlay("jw_logo").opacity(30).flags("relative").width(0.5);
+            Map options = ObjectUtils.emptyMap();
+            Map uploadResult = cloudc.upload(f, options);
+            JSONObject json=new JSONObject(uploadResult);
+            String url=json.getString("url");
+            Videos videos = new Videos();
+            videos.setUrl(url);
+
+
+
+            Map uploadResults = cloudc.upload(f, ObjectUtils.emptyMap());
+            JSONObject jsons=new JSONObject(uploadResults);
+            String downloadUrl=jsons.getString("url");
+            String newDownloadUrl = new String();
+            String attach = "fl_attachment/";
+
+            for (int i = 0; i < downloadUrl.length(); i++) {
+
+                newDownloadUrl += downloadUrl.charAt(i);
+
+                if (i == 47) {
+
+                    newDownloadUrl += attach;
+                }
+            }
+            videos.setStatus(false);
+
+            videos.setDownloadUrl(newDownloadUrl);
+            videosRepository.save(videos);
+            return new ResponseEntity<Videos>(videos, HttpStatus.OK);
+        }catch (IOException e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        }
+    }
 
 
 }

@@ -25,10 +25,6 @@ public class TransactionController {
     @Autowired
     VideosRepository videosRepository;
 
-//    @GetMapping
-//    public Iterable <Transaction> findAll(){
-//        return transactionRepository.findAll();
-//    }
 
     @GetMapping
     public Iterable<Transaction> getAll() {
