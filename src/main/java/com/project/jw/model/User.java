@@ -41,6 +41,26 @@ public class User {
 
     private Boolean status;
 
+    private Date updated_at;
+
+    private Date created_at;
+
+    public Date getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(Date updated_at) {
+        this.updated_at = updated_at;
+    }
+
+    public Date getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(Date created_at) {
+        this.created_at = created_at;
+    }
+
     @Temporal(javax.persistence.TemporalType.DATE)
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
     private Date birthday;
@@ -132,6 +152,16 @@ public class User {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    @PrePersist
+    protected void onCreate(){
+        this.created_at = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate(){
+        this.updated_at = new Date();
     }
 
 
