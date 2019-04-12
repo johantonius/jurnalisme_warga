@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 
@@ -123,9 +124,15 @@ public class VideosController
             Transformation transformation =
                     new Transformation()
                             .chain().overlay("jw_logo").opacity(30).flags("relative").width(0.5);
+            Transformation transformation2 =
+                    new Transformation().height(300).crop("scale");
             Map options = ObjectUtils.asMap(
-                    "resource_type", "video", "transformation", transformation
+                    "resource_type", "video", "eager", Arrays.asList(transformation, transformation2),
+                    "eager_async", true
             );
+//            Map options = ObjectUtils.asMap(
+//                    "resource_type", "video", "transformation", transformation
+//            );
             Map uploadResult = cloudc.upload(f, options);
             JSONObject json=new JSONObject(uploadResult);
             String url=json.getString("url");
@@ -134,6 +141,7 @@ public class VideosController
 
 
 
+//            Map uploadResults = cloudc.upload(f, ObjectUtils.asMap("resource_type", "video", "transformation", new Transformation().height(300).crop("scale")));
             Map uploadResults = cloudc.upload(f, ObjectUtils.asMap("resource_type", "video"));
             JSONObject jsons=new JSONObject(uploadResults);
             String downloadUrl=jsons.getString("url");
