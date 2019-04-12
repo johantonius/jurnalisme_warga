@@ -125,7 +125,7 @@ public class VideosController
                     new Transformation()
                             .chain().overlay("jw_logo").opacity(30).flags("relative").width(0.5);
             Transformation transformation2 =
-                    new Transformation().height(300).crop("scale");
+                    new Transformation().height(100).crop("scale");
             Map options = ObjectUtils.asMap(
                     "resource_type", "video", "eager", Arrays.asList(transformation, transformation2),
                     "eager_async", true
